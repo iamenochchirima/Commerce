@@ -1,0 +1,16 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<center>
+    <h1>Create a new listing</h1>
+</center>
+{% if submitted %}
+    Your listing have been successfully submitted! You can view it here
+{% else %}
+    <form action="{% url 'create_listing' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn btn-secondary" type="submit" value="Save">
+    </form>
+{% endif %}
+{% endblock %}
