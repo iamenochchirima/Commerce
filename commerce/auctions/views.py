@@ -7,12 +7,15 @@ from django.shortcuts import render
 from django.urls import reverse
 from .forms import NewListingForm
 from datetime import datetime
-
+from .models import Auction_listing
 from .models import User
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    listings = Auction_listing.objects.all().order_by('date')
+    return render(request, "auctions/index.html", {
+        "listings": listings
+    })
 
 
 def login_view(request):
