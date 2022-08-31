@@ -21,6 +21,7 @@ class Auction_listing(models.Model):
         ("Home", "Home")
     ]
     categories = models.CharField(max_length=100, null=True, blank=True, choices=category_choices)
+    watchlist = models.ManyToManyField(User, related_name="watchlist", default=None, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
     def __str__(self):

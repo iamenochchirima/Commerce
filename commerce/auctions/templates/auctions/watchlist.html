@@ -1,0 +1,18 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Your watch listings</h2>
+
+    {% for listing in list %}
+    <a href="{% url 'auction_listing' listing.id %}">
+    <div class="watched_listing" >
+        <div><img src="{{listing.image_link}}" alt="image"/></div>
+        <div>{{ listing.title }}</div>
+        <div>{{ listing.description }}</div>
+        <div>${{listing.starting_bid }}</div>
+        <div>Ceated at: {{ listing.date }}</div>
+    </div>
+    </a>
+    <br>
+    {% endfor %}
+{% endblock %}

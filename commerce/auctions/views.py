@@ -3,13 +3,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from .forms import NewListingForm
 from datetime import datetime
 from .models import Auction_listing
 from .models import User
-
 
 def index(request):
     listings = Auction_listing.objects.all().order_by('date')
@@ -69,7 +68,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-@login_required(login_url='/accounts/login/')
+@login_required
 def create_listing(request):
     submitted = False
     if request.method == "POST":
@@ -93,4 +92,21 @@ def auction_listing(request, Auction_listing_id):
     listing = Auction_listing.objects.get(id=Auction_listing_id)
     return render(request, "auctions/auction_listing.html", {
         "item": listing
+    })
+
+@login_required
+def watchlist(request, id):
+    listing = get_object_or_404(Auction_listing, id=id)
+    if listing.watchlist.filter(id=request.user.id).exists():
+        listing.watchlist.remove(request.user)
+    else:
+        listing.watchlist.add(request.user)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    
+
+@login_required
+def watchlist_page(request):
+    watched_list = Auction_listing.objects.filter(watchlist=request.user)
+    return render(request, "auctions/watchlist.html", {
+        "list": watched_list
     })
