@@ -1,11 +1,12 @@
+from decimal import Decimal
 import re
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from .forms import NewListingForm
+from .forms import BidForm, NewListingForm
 from datetime import datetime
 from .models import Auction_listing
 from .models import User
@@ -74,7 +75,7 @@ def create_listing(request):
     if request.method == "POST":
         form = NewListingForm(request.POST)
         if form.is_valid():
-            instance = form.save(commit= False)
+            instance = form.save(commit = False)
             instance.author = request.user
             instance.save()
             return HttpResponseRedirect("/create_listing?submitted=True")
@@ -90,8 +91,10 @@ def create_listing(request):
 
 def auction_listing(request, Auction_listing_id):
     listing = Auction_listing.objects.get(id=Auction_listing_id)
+    form = BidForm()
     return render(request, "auctions/auction_listing.html", {
-        "item": listing
+        "item": listing,
+        "form": form
     })
 
 @login_required
@@ -110,3 +113,20 @@ def watchlist_page(request):
     return render(request, "auctions/watchlist.html", {
         "list": watched_list
     })
+
+@login_required
+def bids(request, id):
+    listing = get_object_or_404(Auction_listing, id=id)
+    if request.method == "POST":
+        amount = Decimal(request.POST.get('amount'))
+
+        if (amount >= listing.starting_bid and (listing.current_bid is None or amount > listing.current_bid)):
+            listing.starting_bid = amount
+            form = BidForm(request.POST)
+            instance = form.save(commit = False)
+            instance.listing = listing
+            instance.author = request.user
+            listing.save()
+    return HttpResponseRedirect("auction_listing", id)
+
+    

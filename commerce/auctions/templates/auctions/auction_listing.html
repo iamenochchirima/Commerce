@@ -14,4 +14,11 @@
         <div>${{item.starting_bid }}</div>
         <div>Ceated at: {{ item.date }}</div>
     </div>
+    <div>
+        <form action="{% url 'bids' item.id %}" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input class="btn btn-secondary" type="submit" value="Place Bid">
+        </form>
+    </div>
 {% endblock %}
