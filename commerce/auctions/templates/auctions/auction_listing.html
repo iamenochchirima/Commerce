@@ -21,4 +21,44 @@
             <input class="btn btn-secondary" type="submit" value="Place Bid">
         </form>
     </div>
+    <div>
+        <form action="{% url 'comments' item.id %}" method="POST">
+            {% csrf_token %}
+            {{ form1.as_p }}
+            <input class="btn btn-secondary" type="submit" value="Post comment">
+        </form>
+    </div>
+    <div>
+        {% if item.status == True and item.author == user %}
+        <div>
+            <a class="btn btn-secondary" href="{% url 'close_listing' item.id %}">Close Auction</a>
+        </div>
+        {% endif %}
+    </div>
+    <div>
+        {% if item.status == False and item.customer != None%}
+        <h3>Auction status</h3>
+        {% if item.author == user %}
+        <div>The item have been sold to <strong>{{ item.customer}}</strong> at <strong>${{ item.starting_bid }}</strong></div>
+        {% elif item.customer == user %}
+        <div>Congragulations! Your <strong>{{ item.title }}</strong> bid won</div>
+        {% else %}
+        <div>Sorry, the item have been sold</div>
+        {% endif %}
+        {% endif %}
+    </div>
+<div>
+    <h2>Comments</h2>
+    {% if not item.comments.all %}
+        <p>No comments yet </p>
+    {% else %}
+        {% for comment in item.comments.all %}
+            <strong>{{ comment.user }}</strong>
+            <strong>{{ comment.date }}</strong>
+            <br>
+            {{ comment.comment }}
+            <br>
+        {% endfor%}
+    {% endif %}
+</div>
 {% endblock %}

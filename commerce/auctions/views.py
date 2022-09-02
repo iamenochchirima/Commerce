@@ -6,9 +6,9 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from .forms import BidForm, NewListingForm
+from .forms import BidForm, NewListingForm, CommentForm
 from datetime import datetime
-from .models import Auction_listing
+from .models import Auction_listing, Bids, Comments, Categories
 from .models import User
 
 def index(request):
@@ -92,9 +92,11 @@ def create_listing(request):
 def auction_listing(request, Auction_listing_id):
     listing = Auction_listing.objects.get(id=Auction_listing_id)
     form = BidForm()
+    form1 = CommentForm
     return render(request, "auctions/auction_listing.html", {
         "item": listing,
-        "form": form
+        "form": form,
+        "form1": form1
     })
 
 @login_required
@@ -125,8 +127,28 @@ def bids(request, id):
             form = BidForm(request.POST)
             instance = form.save(commit = False)
             instance.listing = listing
-            instance.author = request.user
+            instance.user = request.user
+            instance.save()
             listing.save()
+            return HttpResponseRedirect("auction_listing", id)
+        else:
+            return HttpResponseBadRequest("Invalid input")
+    
+
+def close_listing(request, id):
+    listing = get_object_or_404(Auction_listing, id=id)
+    if request.user == listing.author:
+        listing.status = False
+        listing.customer = Bids.objects.filter(listing=listing).last().user
+        listing.save()
     return HttpResponseRedirect("auction_listing", id)
 
-    
+@login_required
+def comments(request, id):
+    listing = get_object_or_404(Auction_listing, id=id)
+    form = CommentForm(request.POST)
+    comment = form.save(commit = False)
+    comment.listing = listing
+    comment.user = request.user
+    comment.save()
+    return HttpResponseRedirect("auction_listing", id)

@@ -3,7 +3,7 @@ from pyexpat import model
 from django import forms
 from django.forms import ModelForm
 
-from .models import Auction_listing, Bids
+from .models import Auction_listing, Bids, Comments
 
 class NewListingForm(ModelForm):
     class Meta:
@@ -15,3 +15,8 @@ class BidForm(ModelForm):
     class Meta:
         model = Bids
         fields = ["amount"]
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comments
+        fields = ["comment"]

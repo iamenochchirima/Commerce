@@ -25,6 +25,7 @@ class Auction_listing(models.Model):
     categories = models.CharField(max_length=100, null=True, blank=True, choices=category_choices)
     watchlist = models.ManyToManyField(User, related_name="watchlist", default=None, blank=True)
     customer = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
+    status = models.BooleanField(default=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author", default=None)
 
     def __str__(self):
@@ -40,10 +41,13 @@ class Bids(models.Model):
         return f"{self.user} {self.date} {self.amount}"
 
 class Comments(models.Model):
-    listing = models.ForeignKey(Auction_listing, on_delete=models.CASCADE, default=None)
+    listing = models.ForeignKey(Auction_listing, related_name="comments", on_delete=models.CASCADE, default=None)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
     comment = models.TextField()
 
     def __str__(self):
         return f"{self.user} {self.date} {self.comment}"
+
+class Categories(models.Model):
+    name = models.CharField(max_length=100)
