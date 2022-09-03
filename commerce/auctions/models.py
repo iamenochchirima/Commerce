@@ -14,15 +14,7 @@ class Auction_listing(models.Model):
     current_bid = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True) 
     date = models.DateTimeField(auto_now_add=True)
     image_link = models.URLField(max_length=600, blank=True,)
-    category_choices = [
-        ("Fashion", "Fashion"),
-        ("Electronics", "Electronicts"),
-        ("Property", "Property"),
-        ("Toys", "Toys"),
-        ("Sports and leisure", "Sports and leisure"),
-        ("Home", "Home")
-    ]
-    categories = models.CharField(max_length=100, null=True, blank=True, choices=category_choices)
+    categories = models.CharField(max_length=100, null=True, blank=True, default= None)
     watchlist = models.ManyToManyField(User, related_name="watchlist", default=None, blank=True)
     customer = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     status = models.BooleanField(default=True)
@@ -49,5 +41,8 @@ class Comments(models.Model):
     def __str__(self):
         return f"{self.user} {self.date} {self.comment}"
 
-class Categories(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.name}"

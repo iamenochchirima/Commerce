@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from .forms import BidForm, NewListingForm, CommentForm
 from datetime import datetime
-from .models import Auction_listing, Bids, Comments, Categories
+from .models import Auction_listing, Bids, Comments, Category
 from .models import User
 
 def index(request):
