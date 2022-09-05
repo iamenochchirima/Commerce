@@ -92,16 +92,23 @@ def create_listing(request):
 def auction_listing(request, Auction_listing_id):
     listing = Auction_listing.objects.get(id=Auction_listing_id)
     form = BidForm()
-    form1 = CommentForm
+    form1 = CommentForm()
+    watched = bool
+
+    if listing.watchlist.filter(id=request.user.id).exists():
+        watched = True
     return render(request, "auctions/auction_listing.html", {
         "item": listing,
         "form": form,
-        "form1": form1
+        "form1": form1,
+        "watched": watched
     })
 
 @login_required
 def watchlist(request, id):
+
     listing = get_object_or_404(Auction_listing, id=id)
+
     if listing.watchlist.filter(id=request.user.id).exists():
         listing.watchlist.remove(request.user)
     else:
