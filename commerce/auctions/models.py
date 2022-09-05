@@ -21,7 +21,7 @@ class Auction_listing(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author", default=None)
 
     def __str__(self):
-        return f"{self.title} {self.starting_bid} {self.description} {self.image_link}"
+        return f"{self.title} {self.starting_bid} {self.description} {self.image_link} {self.categories}"
 
 class Bids(models.Model):
     listing = models.ForeignKey(Auction_listing, on_delete=models.CASCADE, default=None)

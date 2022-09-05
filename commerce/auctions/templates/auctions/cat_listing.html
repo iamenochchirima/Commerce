@@ -1,0 +1,11 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listings for the category {{ name }}</h2>
+    {% for catlist in listing %}
+        {% if catlist.status is not False %}
+        {{ catlist }}
+        <br>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

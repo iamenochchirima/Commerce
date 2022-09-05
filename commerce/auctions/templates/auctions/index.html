@@ -4,15 +4,17 @@
     <h2>Active Listings</h2>
 
     {% for listing in listings%}
-    <a href="{% url 'auction_listing' listing.id %}">
-    <div class="listing" >
-        <div><img src="{{listing.image_link}}" alt="image"/></div>
-        <div>{{ listing.title }}</div>
-        <div>{{ listing.description }}</div>
-        <div>${{listing.starting_bid }}</div>
-        <div>Ceated at: {{ listing.date }}</div>
-    </div>
-    </a>
-    <br>
+        {% if listing.status is not False %}
+        <a href="{% url 'auction_listing' listing.id %}">
+            <div class="listing" >
+                <div><img src="{{listing.image_link}}" alt="image"/></div>
+                <div>{{ listing.title }}</div>
+                <div>{{ listing.description }}</div>
+                <div>${{listing.starting_bid }}</div>
+                <div>Ceated at: {{ listing.date }}</div>
+            </div>
+            </a>
+            <br>
+        {% endif %}
     {% endfor %}
 {% endblock %}

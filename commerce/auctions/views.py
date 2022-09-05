@@ -152,3 +152,16 @@ def comments(request, id):
     comment.user = request.user
     comment.save()
     return HttpResponseRedirect("auction_listing", id)
+
+def categories(request):
+    cat_list = Category.objects.all()
+    return render(request, "auctions/categories.html", {
+        "cat_list": cat_list
+    })
+
+def category_listing(request, name):
+    listings =  Auction_listing.objects.filter(categories=name)
+    return render(request, "auctions/cat_listing.html", {
+    "listing": listings,
+    "name": name
+        })
