@@ -1,3 +1,23 @@
 body {
     padding: 10px;
+    background-color: #262f2f;
+    background-image: linear-gradient(90deg, #262f2f 0%, #a21ba2 100%);
 }
+
+.container {
+    display: grid;
+    max-width: auto;
+    margin: 50px;
+    padding: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+    row-gap: 10px;
+}
+
+.item {
+    background: steelblue;
+    color: white;
+    border: white 1px solid;
+}
+
+
