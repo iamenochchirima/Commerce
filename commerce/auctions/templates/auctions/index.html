@@ -18,15 +18,18 @@
         {% endfor %}
 
     </div>
-    <hr><br>
-    {% if listing.has_previous %}
-    <a href="?page=1">&laquo Fisrt</a>
-    <a href="?page={{ list.previous_page_number }}">Previous</a>
-    {% endif %}
-    Page {{ listing.number }} of {{ listing.paginator.num_pages }}
-    {% if listing.has_next %}
-    <a href="?page={{ listing.next_page_number }}">Next</a>
-    <a href="?page={{ listing.paginator.num_pages }}">Last &raquo</a>
-    {% endif %}
-    <br>
+    <center>
+        <hr><br>
+        {% if listing.has_previous %}
+        <a href="?page=1">&laquo Fisrt</a>
+        <a href="?page={{ list.previous_page_number }}">Previous</a>
+        {% endif %}
+        Page {{ listing.number }} of {{ listing.paginator.num_pages }}
+        {% if listing.has_next %}
+        <a href="?page={{ listing.next_page_number }}">Next</a>
+        <a href="?page={{ listing.paginator.num_pages }}">Last &raquo</a>
+        {% endif %}
+        <br>
+        <br>
+    </center>
 {% endblock %}

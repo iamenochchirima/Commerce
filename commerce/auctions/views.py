@@ -1,5 +1,6 @@
 from decimal import Decimal
 import re
+from types import NoneType
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -20,7 +21,7 @@ def index(request):
         if item.status is True:
             list.append(item)
 
-    pager = Paginator(list, 2)
+    pager = Paginator(list, 6)
     page = request.GET.get('page')
     listing = pager.get_page(page)
 
@@ -44,9 +45,11 @@ def login_view(request):
             })
     else:
         return render(request, "auctions/login.html")
+
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
+
 def register(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -70,6 +73,7 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
 @login_required
 def create_listing(request):
     submitted = False
@@ -89,6 +93,7 @@ def create_listing(request):
         "form": form,
         "submitted": submitted,
     })
+
 def auction_listing(request, Auction_listing_id):
     listing = Auction_listing.objects.get(id=Auction_listing_id)
     form = BidForm()
@@ -121,6 +126,7 @@ def watchlist_page(request):
     return render(request, "auctions/watchlist.html", {
         "list": watched_list
     })
+
 @login_required
 def bids(request, id):
     listing = get_object_or_404(Auction_listing, id=id)
@@ -144,7 +150,11 @@ def close_listing(request, id):
         listing.status = False
         listing.customer = Bids.objects.filter(listing=listing).last().user
         listing.save()
+
+        if (Bids.objects.filter(listing=listing).last().user) is NoneType:
+            return HttpResponseBadRequest("It seems like noone have bided on your listing yet")
     return HttpResponseRedirect("auction_listing", id)
+
 @login_required
 def comments(request, id):
     listing = get_object_or_404(Auction_listing, id=id)
@@ -154,11 +164,13 @@ def comments(request, id):
     comment.user = request.user
     comment.save()
     return HttpResponseRedirect("auction_listing", id)
+
 def categories(request):
     cat_list = Category.objects.all()
     return render(request, "auctions/categories.html", {
         "cat_list": cat_list
     })
+
 def category_listing(request, name):
     listings =  Auction_listing.objects.filter(categories=name)
     return render(request, "auctions/cat_listing.html", {
