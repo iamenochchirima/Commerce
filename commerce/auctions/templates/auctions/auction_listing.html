@@ -13,7 +13,7 @@
     {% else %}
     <a href="{% url 'login' %}" class="btn btn-secondary">Add to Watchlist</a>
     {% endif %}
-    <div class="listing_item" >
+    <div class="item" >
         <div><img src="{{item.image_link}}" alt="image"/></div>
         <div>{{ item.title }}</div>
         <div>{{ item.description }}</div>

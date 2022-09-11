@@ -5,20 +5,28 @@
 
     <div class="container">
 
-        {% for listing in listings%}
-            {% if listing.status is not False %}
+        {% for listing in listing%}
             <a href="{% url 'auction_listing' listing.id %}">
                 <div class="item" >
-                    <div><img src="{{listing.image_link}}" alt="image"/></div>
+                    <div><img height="200" width="200" src="{{listing.image_link}}" alt="image"/></div>
                     <div>{{ listing.title }}</div>
                     <div>{{ listing.description }}</div>
                     <div>${{listing.starting_bid }}</div>
                     <div>Ceated at: {{ listing.date }}</div>
                 </div>
                 </a>
-            {% endif %}
         {% endfor %}
 
     </div>
-
+    <hr><br>
+    {% if listing.has_previous %}
+    <a href="?page=1">&laquo Fisrt</a>
+    <a href="?page={{ list.previous_page_number }}">Previous</a>
+    {% endif %}
+    Page {{ listing.number }} of {{ listing.paginator.num_pages }}
+    {% if listing.has_next %}
+    <a href="?page={{ listing.next_page_number }}">Next</a>
+    <a href="?page={{ listing.paginator.num_pages }}">Last &raquo</a>
+    {% endif %}
+    <br>
 {% endblock %}

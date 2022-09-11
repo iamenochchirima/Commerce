@@ -1,5 +1,6 @@
 from decimal import Decimal
 import re
+from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -13,19 +14,26 @@ from .models import User
 
 def index(request):
     listings = Auction_listing.objects.all().order_by('date')
-    return render(request, "auctions/index.html", {
-        "listings": listings
-    })
+    list = []
 
+    for item in listings:
+        if item.status is True:
+            list.append(item)
+
+    pager = Paginator(list, 2)
+    page = request.GET.get('page')
+    listing = pager.get_page(page)
+
+    return render(request, "auctions/index.html", {
+        "listing": listing,
+    })
 
 def login_view(request):
     if request.method == "POST":
-
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
-
         # Check if authentication successful
         if user is not None:
             login(request, user)
@@ -36,18 +44,13 @@ def login_view(request):
             })
     else:
         return render(request, "auctions/login.html")
-
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
-
 def register(request):
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
-
         # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
@@ -55,7 +58,6 @@ def register(request):
             return render(request, "auctions/register.html", {
                 "message": "Passwords must match."
             })
-
         # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
@@ -68,7 +70,6 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
-
 @login_required
 def create_listing(request):
     submitted = False
@@ -88,7 +89,6 @@ def create_listing(request):
         "form": form,
         "submitted": submitted,
     })
-
 def auction_listing(request, Auction_listing_id):
     listing = Auction_listing.objects.get(id=Auction_listing_id)
     form = BidForm()
@@ -111,24 +111,21 @@ def watchlist(request, id):
 
     if listing.watchlist.filter(id=request.user.id).exists():
         listing.watchlist.remove(request.user)
-    else:
+    else:  
         listing.watchlist.add(request.user)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
     
-
 @login_required
 def watchlist_page(request):
     watched_list = Auction_listing.objects.filter(watchlist=request.user)
     return render(request, "auctions/watchlist.html", {
         "list": watched_list
     })
-
 @login_required
 def bids(request, id):
     listing = get_object_or_404(Auction_listing, id=id)
     if request.method == "POST":
         amount = Decimal(request.POST.get('amount'))
-
         if (amount >= listing.starting_bid and (listing.current_bid is None or amount > listing.current_bid)):
             listing.starting_bid = amount
             form = BidForm(request.POST)
@@ -141,7 +138,6 @@ def bids(request, id):
         else:
             return HttpResponseBadRequest("Invalid input")
     
-
 def close_listing(request, id):
     listing = get_object_or_404(Auction_listing, id=id)
     if request.user == listing.author:
@@ -149,7 +145,6 @@ def close_listing(request, id):
         listing.customer = Bids.objects.filter(listing=listing).last().user
         listing.save()
     return HttpResponseRedirect("auction_listing", id)
-
 @login_required
 def comments(request, id):
     listing = get_object_or_404(Auction_listing, id=id)
@@ -159,13 +154,11 @@ def comments(request, id):
     comment.user = request.user
     comment.save()
     return HttpResponseRedirect("auction_listing", id)
-
 def categories(request):
     cat_list = Category.objects.all()
     return render(request, "auctions/categories.html", {
         "cat_list": cat_list
     })
-
 def category_listing(request, name):
     listings =  Auction_listing.objects.filter(categories=name)
     return render(request, "auctions/cat_listing.html", {

@@ -5,7 +5,9 @@
     <h1>Create a new listing</h1>
 </center>
 {% if submitted %}
-    Your listing have been successfully submitted!
+    <center>
+    Your listing have been successfully submitted! 
+    </center>
 {% else %}
     <form action="{% url 'create_listing' %}" method="POST">
         {% csrf_token %}
