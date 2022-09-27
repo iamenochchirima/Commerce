@@ -1,18 +1,26 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+<section class="index">
+    <center><h2>Active Listings</h2></center> 
 
     <div class="container">
 
         {% for listing in listing%}
             <a href="{% url 'auction_listing' listing.id %}">
                 <div class="item" >
-                    <div><img height="200" width="200" src="{{listing.image_link}}" alt="image"/></div>
-                    <div>{{ listing.title }}</div>
-                    <div>{{ listing.description }}</div>
-                    <div>${{listing.starting_bid }}</div>
-                    <div>Ceated at: {{ listing.date }}</div>
+                    <div>
+                        <img src="{{ listing.image_link|default:'/static/images/default.png' }}" alt="image"/>
+                    </div>
+                    <div>
+                        <div id="title">{{ listing.title }}</div>
+                        <div id="desciption"> Description: {{ listing.description }}</div>
+                        <br>
+                        <div id="price">${{listing.starting_bid }}</div>
+                        <br>
+                        <div id="created">Ceated at: {{ listing.date }}</div>
+                    </div>
+                    
                 </div>
                 </a>
         {% endfor %}
@@ -26,10 +34,11 @@
         {% endif %}
         Page {{ listing.number }} of {{ listing.paginator.num_pages }}
         {% if listing.has_next %}
-        <a href="?page={{ listing.next_page_number }}">Next</a>
-        <a href="?page={{ listing.paginator.num_pages }}">Last &raquo</a>
+        <a id="next" href="?page={{ listing.next_page_number }}">Next</a>
+        <a id="last" href="?page={{ listing.paginator.num_pages }}">Last &raquo</a>
         {% endif %}
         <br>
         <br>
     </center>
+</section>
 {% endblock %}

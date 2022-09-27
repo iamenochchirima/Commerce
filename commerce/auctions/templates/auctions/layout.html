@@ -4,60 +4,61 @@
 <html lang="en">
     <head>
         <title>{% block title %}Auctions{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="{% static 'auctions/styles.css'%}/" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'auctions/styles.css'%}/">
     </head>
     <body>
         <header>
-                <div auction-logo>
+            {% if user.is_authenticated %}
+                <div class="header-left">
                     <h1>Auctions</h1>
+                    <i>Signed in as-<strong>{{ user.username }}</strong>.</i>
                 </div>
-                <div class="header-items">
-                    {% if user.is_authenticated %}
-                        <div class="header-item">
-                            Signed in as-<strong>{{ user.username }}</strong>.
-                        </div>
-                        <div class="header-item">
-                            <a class="header-link" href="{% url 'logout' %}">Log Out</a>
-                        </div>
-                    {% else %}
-                        <div class="header-item">
-                            Not signed in.
-                        </div>
-                        <div class="header-item">
-                            <a class="header-link" href="{% url 'login' %}">Log In</a>
-                        </div>
-                        <div class="header-item">
-                            <a class="header-link" href="{% url 'register' %}">Register</a>
-                        </div>
-                    {% endif %}
+                <div class="header-right">
+                    <ul>
+                        <li>
+                            <a href="{% url 'index' %}">Active Listings</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'categories' %}">Categories</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'create_listing' %}">Create listing</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'watchlist_page' %}">Watchlist</a>
+                        </li>
+                        <li><a href="{% url 'logout' %}">Log Out</a>
+                        </li>
+                    </ul>
                 </div>
+            {% else %}
+                <div class="header-left">
+                    <h1>Auctions</h1>
+                    <i>Not signed in.</i>
+                </div>
+                <div class="header-right">
+                    <ul>
+                        <li>
+                            <a href="{% url 'index' %}">Active Listings</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'categories' %}">Categories</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'login' %}">Log In</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'register' %}">Register</a>
+                        </li>
+
+                    </ul>
+                </div>     
+            {% endif %}
         </header>
-        <nav>
-            <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'categories' %}">Categories</a>
-                </li>
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'create_listing' %}">Create listing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'watchlist_page' %}">Watchlist</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-        <main>
+        <section class="body">
             {% block body %}
             {% endblock %}
-        </main>
-        <footer>
-            Footer
-        </footer>
+        </section>
     </body>
 </html>
 

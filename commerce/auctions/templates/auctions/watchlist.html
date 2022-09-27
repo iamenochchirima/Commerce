@@ -2,21 +2,35 @@
 
 {% block body %}
     {% if list %}
-    <h2>Your watch listings</h2>
+    <center><h2>Your watch listings</h2></center>
+
+    <div class="container">
 
     {% for listing in list %}
     <a href="{% url 'auction_listing' listing.id %}">
-    <div class="watched_listing" >
-        <div><img src="{{listing.image_link}}" alt="image"/></div>
-        <div>{{ listing.title }}</div>
-        <div>{{ listing.description }}</div>
-        <div>${{listing.starting_bid }}</div>
-        <div>Ceated at: {{ listing.date }}</div>
-    </div>
+        <div class="item" >
+            <div>
+                <img src="{{ listing.image_link|default:'/static/images/default.png' }}" alt="image"/>
+            </div>
+            <div>
+                <div id="title">{{ listing.title }}</div>
+                <div id="desciption"> Description: {{ listing.description }}</div>
+                <br>
+                <div id="price">${{listing.starting_bid }}</div>
+                <br>
+                <div id="created">Ceated at: {{ listing.date }}</div>
+            </div>
+            
+        </div>
     </a>
-    <br>
     {% endfor %}
+
+    </div>
+
     {% else %}
-    <h3>Your watchlist is empty, you haven't added any listings to your watchlist yet.</h3>
+        <div class="watchlist-info">
+            <h3>Your watchlist is empty, you haven't added any listings to your watchlist yet.</h3>
+        </div>
+
     {% endif %}
 {% endblock %}
