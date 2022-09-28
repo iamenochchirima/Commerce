@@ -8,7 +8,7 @@
 
         {% for listing in listing%}
             <a href="{% url 'auction_listing' listing.id %}">
-                <div class="item" >
+                <div class="item">
                     <div>
                         <img src="{{ listing.image_link|default:'/static/images/default.png' }}" alt="image"/>
                     </div>
@@ -19,8 +19,7 @@
                         <div id="price">${{listing.starting_bid }}</div>
                         <br>
                         <div id="created">Ceated at: {{ listing.date }}</div>
-                    </div>
-                    
+                    </div>  
                 </div>
                 </a>
         {% endfor %}
@@ -29,8 +28,8 @@
     <center>
         <hr><br>
         {% if listing.has_previous %}
-        <a href="?page=1">&laquo Fisrt</a>
-        <a href="?page={{ list.previous_page_number }}">Previous</a>
+        <a id="first" href="?page=1">&laquo First</a>
+        <a id="priv" href="?page={{ list.previous_page_number }}">Previous</a>
         {% endif %}
         Page {{ listing.number }} of {{ listing.paginator.num_pages }}
         {% if listing.has_next %}

@@ -9,10 +9,12 @@
     Your listing have been successfully submitted! 
     </center>
 {% else %}
+<div class="form-group">
     <form action="{% url 'create_listing' %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <input class="btn btn-secondary" type="submit" value="Save">
     </form>
+</div>
 {% endif %}
 {% endblock %}

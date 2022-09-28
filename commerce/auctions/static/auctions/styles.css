@@ -1,10 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0%;
+}
+
 :root {
   --primary-color: #66dfac;
 }
 
 body {
-  font-family: "Poppins";
+  font-family: "Poppins" sans-serif;
   margin: 0;
   color: white;
   background: #333;
@@ -15,6 +21,10 @@ body ul {
 body a {
   text-decoration: none;
   color: aliceblue;
+}
+body a:hover {
+  text-decoration: none;
+  color: white;
 }
 body header {
   margin: 0;
@@ -41,23 +51,32 @@ body .container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 30px;
+  margin: 0;
 }
-body .container .item {
+body .item {
   display: flexbox;
   min-width: 250px;
   border-radius: 1em;
   padding: 2em 0 2em 3.2em;
 }
-body .container .item img {
+body .item img {
   height: 300px;
   width: 300px;
   border-radius: 2em;
 }
-body .container .item #title {
+body .item img:before {
+  content: "";
+  display: block;
+  background-image: url("/static/images/default.png");
+  height: 300px;
+  width: 300px;
+  border-radius: 2em;
+}
+body .item #title {
   font-size: 30px;
   color: var(--primary-color);
 }
-body .container .item #created {
+body .item #created {
   font-size: 12px;
 }
 body .index {
@@ -71,10 +90,25 @@ body #next {
 body #last {
   color: var(--primary-color);
 }
+body #first {
+  color: var(--primary-color);
+  padding: 0 1em 0 0;
+}
+body #priv {
+  color: var(--primary-color);
+  padding: 0 1em 0 0;
+}
 body .categories-list {
   font-size: larger;
 }
 body .watchlist-info {
   position: absolute;
   padding: 10em 0 0 20em;
+}
+body .listing-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+body .listing-container .listing-cols {
+  padding: 5em 0 0 10em;
 }/*# sourceMappingURL=styles.css.map */

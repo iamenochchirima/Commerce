@@ -1,11 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0%;
+}
+
 :root {
     --primary-color: #66dfac;
 }
 
 body {
-    font-family: 'Poppins';
+    font-family: 'Poppins' sans-serif;
     margin: 0;
     color: white;
     background: #333;
@@ -18,6 +24,11 @@ body {
         text-decoration: none;
         color: aliceblue;
     }
+
+    a:hover {
+            text-decoration: none;
+            color: white;
+        }
 
     header {
         margin: 0;
@@ -49,27 +60,37 @@ body {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         gap: 30px;
+        margin: 0;
+    }
 
-        .item {
-            display: flexbox;
-            min-width: 250px;
-            border-radius: 1em;
-            padding: 2em 0 2em 3.2em;
+    .item {
+        display: flexbox;
+        min-width: 250px;
+        border-radius: 1em;
+        padding: 2em 0 2em 3.2em;
 
-            img {
-                height: 300px;
-                width: 300px;
-                border-radius: 2em;
-            }
+        img {
+            height: 300px;
+            width: 300px;
+            border-radius: 2em;
+        }
 
-            #title {
-                font-size: 30px;
-                color: var(--primary-color);
-            }
+        img:before {
+            content: '';
+            display: block;
+            background-image: url('/static/images/default.png');
+            height: 300px;
+            width: 300px;
+            border-radius: 2em;
+        }
 
-            #created {
-                font-size: 12px;
-            }
+        #title {
+            font-size: 30px;
+            color: var(--primary-color);
+        }
+
+        #created {
+            font-size: 12px;
         }
     }
 
@@ -88,6 +109,16 @@ body {
             color: var(--primary-color);
         }
 
+        #first {
+            color: var(--primary-color);
+            padding: 0 1em 0 0;
+        }
+
+        #priv {
+            color: var(--primary-color);
+            padding: 0 1em 0 0;
+        }
+
     .categories-list {
         font-size: larger;
     }
@@ -95,5 +126,14 @@ body {
     .watchlist-info {
         position: absolute;
         padding: 10em 0 0 20em
+    }
+
+    .listing-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        .listing-cols {
+            padding: 5em 0 0 10em ;
+        }
     }
 }
