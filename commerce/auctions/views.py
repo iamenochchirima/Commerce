@@ -14,14 +14,15 @@ from .models import Auction_listing, Bids, Comments, Category
 from .models import User
 
 def index(request):
-    listings = Auction_listing.objects.all().order_by('date')
-    list = []
+    listings = Auction_listing.objects.all().order_by('-date')
 
-    for item in listings:
-        if item.status is True:
-            list.append(item)
+    #list = []
 
-    pager = Paginator(list, 6)
+    #for item in listings:
+        #if item.status is True:
+            #list.append(item)
+
+    pager = Paginator(listings, 6)
     page = request.GET.get('page')
     listing = pager.get_page(page)
 
@@ -109,7 +110,7 @@ def auction_listing(request, Auction_listing_id):
         "watched": watched
     })
 
-@login_required
+@login_required(login_url='login')
 def watchlist(request, id):
 
     listing = get_object_or_404(Auction_listing, id=id)
@@ -120,20 +121,21 @@ def watchlist(request, id):
         listing.watchlist.add(request.user)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
     
-@login_required
+@login_required(login_url='login')
 def watchlist_page(request):
     watched_list = Auction_listing.objects.filter(watchlist=request.user)
     return render(request, "auctions/watchlist.html", {
         "list": watched_list
     })
 
-@login_required
+@login_required(login_url='login')
 def bids(request, id):
     listing = get_object_or_404(Auction_listing, id=id)
+    error = False
     if request.method == "POST":
         amount = Decimal(request.POST.get('amount'))
         if (amount >= listing.starting_bid and (listing.current_bid is None or amount > listing.current_bid)):
-            listing.starting_bid = amount
+            listing.current_bid = amount
             form = BidForm(request.POST)
             instance = form.save(commit = False)
             instance.listing = listing
@@ -142,7 +144,10 @@ def bids(request, id):
             listing.save()
             return HttpResponseRedirect("auction_listing", id)
         else:
-            return HttpResponseBadRequest("Invalid input")
+            error = True
+            return render(request, "auctions/auction_listing.html", {
+            "error": error
+            })
     
 def close_listing(request, id):
     listing = get_object_or_404(Auction_listing, id=id)
@@ -155,7 +160,7 @@ def close_listing(request, id):
             return HttpResponseBadRequest("It seems like noone have bided on your listing yet")
     return HttpResponseRedirect("auction_listing", id)
 
-@login_required
+@login_required(login_url='login')
 def comments(request, id):
     listing = get_object_or_404(Auction_listing, id=id)
     form = CommentForm(request.POST)
@@ -173,6 +178,7 @@ def categories(request):
 
 def category_listing(request, name):
     listings =  Auction_listing.objects.filter(categories=name)
+    
     return render(request, "auctions/cat_listing.html", {
     "listing": listings,
     "name": name

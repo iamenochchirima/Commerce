@@ -1,15 +1,18 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+{% if submitted %}
+<br><br><br><br><br><br>
+    <center>
+    <h2>Your listing have been successfully saved! :)</h2>
+    </center>
+{% else %}
+<br>
 <center>
     <h1>Create a new listing</h1>
 </center>
-{% if submitted %}
-    <center>
-    Your listing have been successfully submitted! 
-    </center>
-{% else %}
-<div class="form-group">
+<br>
+<div class="form-group create_listing-form">
     <form action="{% url 'create_listing' %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}

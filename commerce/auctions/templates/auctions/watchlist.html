@@ -16,8 +16,15 @@
                 <div id="title">{{ listing.title }}</div>
                 <div id="desciption"> Description: {{ listing.description }}</div>
                 <br>
-                <div id="price">${{listing.starting_bid }}</div>
+
+                {% if listing.current_bid is not none %}
+                <div id="price"> Current price: ${{ listing.current_bid }}</div>
                 <br>
+                {% else %}
+                <div id="price"> Starting bid :${{ listing.starting_bid }}</div>
+                <br>
+                {% endif %}
+                
                 <div id="created">Ceated at: {{ listing.date }}</div>
             </div>
             

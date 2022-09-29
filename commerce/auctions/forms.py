@@ -1,3 +1,4 @@
+from cProfile import label
 from dataclasses import fields
 from distutils.command.clean import clean
 from email.policy import default
@@ -15,7 +16,6 @@ for item in choices:
     category_list.append(item)
 
 class NewListingForm(ModelForm):
-    categories = forms.ChoiceField( widget= forms.Select(attrs={'class': 'form-control col-md-5 col-lg-6'}), choices=category_list)
 
     class Meta:
         model = Auction_listing
@@ -26,7 +26,7 @@ class NewListingForm(ModelForm):
             "description": forms.Textarea(attrs={'class': 'form-control col-md-5 col-lg-6'}),
             "starting_bid": forms.NumberInput(attrs={'class': 'form-control col-md-5 col-lg-6'}),
             "image_link": forms.URLInput(attrs={'class': 'form-control col-md-5 col-lg-6'}),
-           
+           "categories": forms.Select(attrs={'class': 'form-control col-md-5 col-lg-6'}, choices=category_list)
         }
 
 class BidForm(ModelForm):
@@ -36,7 +36,7 @@ class BidForm(ModelForm):
         fields = ["amount"]
 
         widgets = {
-            "amount": forms.NumberInput(attrs={'class': 'form-control col-md-5 col-lg-6'})
+            "amount": forms.NumberInput(attrs={'class': 'form-control'})
         }
 
 class CommentForm(ModelForm):
@@ -45,5 +45,5 @@ class CommentForm(ModelForm):
         fields = ["comment"]
 
         widgets = {
-            "comment": forms.Textarea(attrs={'class': 'form-control col-md-3 col-lg-6'})
+            "comment": forms.Textarea(attrs={'class': 'form-control'})
         }

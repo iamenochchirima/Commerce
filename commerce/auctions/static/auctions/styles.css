@@ -109,6 +109,28 @@ body .listing-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+body .listing-container #created {
+  font-size: 12px;
+}
 body .listing-container .listing-cols {
-  padding: 5em 0 0 10em;
+  padding: 5em 5em 0 5em;
+}
+body .listing-container .listing-left-col h2 {
+  margin-left: 2.8em;
+}
+body .listing-container .listing-right-col {
+  padding-left: 0%;
+}
+body .listing-container .listing-right-col span {
+  font-weight: bold;
+  font-size: 20px;
+}
+body .listing-container .listing-right-col h3 {
+  color: #007af3;
+}
+body .bid-error {
+  padding-top: 10em;
+}
+body .create_listing-form {
+  margin-left: 5em;
 }/*# sourceMappingURL=styles.css.map */

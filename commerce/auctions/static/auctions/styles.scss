@@ -130,10 +130,42 @@ body {
 
     .listing-container {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns:1fr 1fr;
+
+        #created {
+            font-size: 12px;
+        }
 
         .listing-cols {
-            padding: 5em 0 0 10em ;
+            padding: 5em 5em 0 5em ;
         }
+
+        .listing-left-col {
+
+            h2 {
+                margin-left: 2.8em;
+            }
+        }
+
+        .listing-right-col {
+            padding-left: 0%;
+
+            span {
+                font-weight: bold;
+                font-size: 20px;
+            }
+
+            h3 {
+                color: #007af3;
+            }
+        }
+    }
+
+    .bid-error {
+        padding-top: 10em;
+    }
+
+    .create_listing-form {
+        margin-left: 5em;
     }
 }
