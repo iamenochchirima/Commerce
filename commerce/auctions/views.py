@@ -178,8 +178,16 @@ def categories(request):
 
 def category_listing(request, name):
     listings =  Auction_listing.objects.filter(categories=name)
+
+    num_of_items = len(Auction_listing.objects.filter(categories=name))
     
+    size = True
+
+    if (num_of_items == 0):
+        size = False
+
     return render(request, "auctions/cat_listing.html", {
     "listing": listings,
-    "name": name
+    "name": name,
+    "size": size,
         })

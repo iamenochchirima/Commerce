@@ -1,35 +1,42 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-   <center><h2>Listings for the category {{ name }}</h2></center>
-    <div class="container">
-    {% for catlist in listing %}
-        {% if catlist.status is not False %}
-        
-                <a href="{% url 'auction_listing' catlist.id %}">
-                    <div class="item" >
-                        <div>
-                            <img src="{{ catlist.image_link|default:'/static/images/default.png' }}" alt="image"/>
-                        </div>
-                        <div>
-                            <div id="title">{{ catlist.title }}</div>
-                            <div id="desciption"> Description: {{ catlist.description }}</div>
-                            <br>
+{% if size %}
 
-                            {% if catlist.current_bid is not none %}
-                            <div id="price"> Current price: ${{ caatlist.current_bid }}</div>
-                            <br>
-                            {% else %}
-                            <div id="price"> Starting bid: ${{ catlist.starting_bid }}</div>
-                            <br>
-                            {% endif %}
-
-                            <div id="created">Ceated at: {{ catlist.date }}</div>
-                        </div>
+<center><h2>Listings for the category {{ name }}</h2></center>
+<div class="container">
+{% for catlist in listing %}
+    
+            <a href="{% url 'auction_listing' catlist.id %}">
+                <div class="item" >
+                    <div>
+                        <img src="{{ catlist.image_link|default:'/static/images/default.png' }}" alt="image"/>
                     </div>
-                </a>
-        {% endif %}
-    {% endfor %}
+                    <div>
+                        <div id="title">{{ catlist.title }}</div>
+                        <div id="desciption"> Description: {{ catlist.description }}</div>
+                        <br>
+
+                        {% if catlist.current_bid is not none %}
+                        <div id="price"> Current price: ${{ catlist.current_bid }}</div>
+                        <br>
+                        {% else %}
+                        <div id="price"> Starting bid: ${{ catlist.starting_bid }}</div>
+                        <br>
+                        {% endif %}
+
+                        <div id="created">Ceated at: {{ catlist.date }}</div>
+                    </div>
+                </div>
+            </a>
+{% endfor %}
 </div>
+
+{% else %}
+<br><br><br>
+<center><h2>The category {{ name }} is currently empty</h2></center>
+
+{% endif %}
+ 
 {% endblock %}
 
